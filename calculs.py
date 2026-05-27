@@ -113,7 +113,7 @@ def preprocess_dataset(df):
 
     if 'ytm' in df.columns:
         df.loc[df['statut'] == 'expire', 'ytm_calculee'] = \
-            df.loc[df['statut'] == 'expire', 'ytm']
+            df.loc[df['statut'] == 'expire', 'ytm'].values
 
     df['ytm_calculee'] = df['ytm_calculee'].fillna(
         df.groupby('Pays')['ytm_calculee'].transform('median')
