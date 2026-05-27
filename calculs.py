@@ -111,10 +111,17 @@ def preprocess_dataset(df):
             ), axis=1
         )
 
+    #if 'ytm' in df.columns:
+        #df.loc[df['statut'] == 'expire', 'ytm_calculee'] = \
+            #df.loc[df['statut'] == 'expire', 'ytm'].values
     if 'ytm' in df.columns:
+        # 1. On force la colonne 'ytm' à être convertie en nombres décimaux
+        ytm_numerique = pd.to_numeric(df['ytm'], errors='coerce')
+    
+        # 2. On applique le filtre avec les valeurs converties nettoyées
         df.loc[df['statut'] == 'expire', 'ytm_calculee'] = \
-            df.loc[df['statut'] == 'expire', 'ytm'].values
-
+               ytm_numerique.loc[df['statut'] == 'expire'].values
+    
     df['ytm_calculee'] = df['ytm_calculee'].fillna(
         df.groupby('Pays')['ytm_calculee'].transform('median')
     )
